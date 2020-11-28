@@ -32,13 +32,13 @@ class PanelBotones extends JPanel implements ActionListener {
         abajo = new JButton();
         izquierda = new JButton();
         derecha = new JButton();
-        arriba.setBounds(20, 20, 120, 50);
-        arriba.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/arriba.png"),50,50));
+        arriba.setBounds(20, 20, 60, 90);
+        arriba.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/arriba.png"),85,95));
         arriba.setVisible(true);
         arriba.addActionListener(this);
         arriba.setContentAreaFilled(false);
-        arriba.setFocusPainted(false);
-        arriba.setBorderPainted(false);
+        //arriba.setFocusPainted(false);
+        //arriba.setBorderPainted(false);
 
         setVisible(true);
         setBounds(0,0, 300, 365);
