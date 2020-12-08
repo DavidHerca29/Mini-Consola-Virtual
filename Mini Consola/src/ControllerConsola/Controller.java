@@ -1,9 +1,18 @@
 package ControllerConsola;
 
+import org.json.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+
 
 public class Controller {
     public static void main(String[] args) {
@@ -92,6 +101,20 @@ class PanelBotones extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object botonPresionado = e.getSource();
-        System.out.println("Yes");
+        try {
+            Socket socket = new Socket("192.168.1.124", 9999);
+            DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
+            BufferedReader flujoEntrada = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message", "Hello World");
+
+            flujoSalida.writeUTF(jsonObject.toString() + "\n");
+            flujoSalida.flush();
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            System.out.println(ioException.getMessage());
+        }
     }
 }

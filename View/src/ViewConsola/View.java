@@ -4,13 +4,16 @@ import com.sun.source.util.ParameterNameProvider;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class View {
     public static void main(String[] args){
         Pantalla pantalla = new Pantalla();
     }
 }
-class Pantalla extends JFrame{
+class Pantalla extends JFrame implements Runnable{
     private JLabel[][] pixels = new JLabel[50][50];
     //private ModeloPantalla viewPixels;
     public Pantalla(){
@@ -33,6 +36,19 @@ class Pantalla extends JFrame{
         setVisible(true);
         //viewPixels = new ModeloPantalla();
         //add(viewPixels);
+        Thread hilo1 = new Thread(this);
+        hilo1.start();
+
+    }
+    @Override
+    public void run() {
+        try {
+            ServerSocket servidorView = new ServerSocket(9999);
+
+            Socket socketAux = servidorView.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 class ModeloPantalla extends JPanel{
@@ -55,3 +71,4 @@ class ModeloPantalla extends JPanel{
         }
     }
 }
+
