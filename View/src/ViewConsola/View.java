@@ -11,13 +11,28 @@ public class View {
     }
 }
 class Pantalla extends JFrame{
-    private ModeloPantalla viewPixels = new ModeloPantalla();
-    public Pantalla() throws HeadlessException {
-        setVisible(true);
-        setSize(820, 640);
+    private JLabel[][] pixels = new JLabel[50][50];
+    //private ModeloPantalla viewPixels;
+    public Pantalla(){
+        getContentPane().setBackground(Color.BLACK);
+        setSize(1200, 650);
         setLocationRelativeTo(null);
         setLayout(new GridLayout(50, 50));
-        add(viewPixels);
+        for (int i = 0; i<50;i++){
+            for (int j=0;j<50;j++){
+                pixels[i][j] = new JLabel();
+                pixels[i][j].setOpaque(true);
+                pixels[i][j].setBackground(Color.WHITE);
+                pixels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                //pixels[i][j].setPreferredSize(new Dimension(10, 10));
+                add(pixels[i][j]);
+            }
+        }
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+        //viewPixels = new ModeloPantalla();
+        //add(viewPixels);
     }
 }
 class ModeloPantalla extends JPanel{
@@ -30,7 +45,7 @@ class ModeloPantalla extends JPanel{
         for (int i = 0; i<50;i++){
             for (int j=0;j<50;j++){
                 pixels[i][j] = new JLabel();
-                pixels[i][j].setBackground(new Color(i, j, 123));
+                pixels[i][j].setBackground(Color.RED);
             }
         }
         for (int i=0; i<50; i++){
