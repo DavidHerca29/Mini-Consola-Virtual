@@ -26,26 +26,52 @@ class PanelBotones extends JPanel implements ActionListener {
     private JButton abajo;
     private JButton derecha;
     private JButton izquierda;
+    private JButton Comando;
     public PanelBotones() {
+        setVisible(true);
+        setBounds(0,0, 300, 345);
         setLayout(null);
+
         arriba = new JButton();
+        Comando = new JButton();
         abajo = new JButton();
         izquierda = new JButton();
         derecha = new JButton();
-        arriba.setBounds(20, 20, 60, 90);
-        arriba.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/arriba.png"),85,95));
+        arriba.setBounds(115, 25, 60, 80);
+        arriba.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/arriba.png"),85,85));
         arriba.setVisible(true);
         arriba.addActionListener(this);
         arriba.setContentAreaFilled(false);
-        //arriba.setFocusPainted(false);
-        //arriba.setBorderPainted(false);
 
-        setVisible(true);
-        setBounds(0,0, 300, 365);
+        abajo.setBounds(115, 195, 60, 80);
+        abajo.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/abajo.png"),85,75));
+        abajo.setVisible(true);
+        abajo.addActionListener(this);
+        abajo.setContentAreaFilled(false);
+
+        izquierda.setBounds(25, 120, 80, 60);
+        izquierda.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/izquierda.png"),85,75));
+        izquierda.setVisible(true);
+        izquierda.addActionListener(this);
+        izquierda.setContentAreaFilled(false);
+
+        derecha.setBounds(185, 120, 80, 60);
+        derecha.setIcon(scaleImage(new ImageIcon("Mini Consola/src/Imagenes/derecha.png"),80,65));
+        derecha.setVisible(true);
+        derecha.addActionListener(this);
+        derecha.setContentAreaFilled(false);
+
+        Comando.setBounds(115, 120, 60, 60);
+        Comando.setBackground(new Color(217, 46, 46));
+        Comando.setVisible(true);
+        Comando.addActionListener(this);
+        //Comando.setContentAreaFilled(false);
+
         add(arriba);
-        //add(abajo);
-        //add(izquierda);
-        //add(derecha);
+        add(abajo);
+        add(Comando);
+        add(izquierda);
+        add(derecha);
     }
     public ImageIcon scaleImage(ImageIcon icon, int w, int h) {
         int nw = icon.getIconWidth();
