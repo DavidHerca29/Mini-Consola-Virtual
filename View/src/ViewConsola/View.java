@@ -1,12 +1,14 @@
 package ViewConsola;
 
 import com.sun.source.util.ParameterNameProvider;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class View {
     public static void main(String[] args){
@@ -45,7 +47,19 @@ class Pantalla extends JFrame implements Runnable{
         try {
             ServerSocket servidorView = new ServerSocket(9999);
 
-            Socket socketAux = servidorView.accept();
+            while (true) {
+                Socket socketAux = servidorView.accept();
+
+                DataInputStream flujoEntrada = new DataInputStream(socketAux.getInputStream());
+
+                String texto = flujoEntrada.readUTF();
+                JSONObject jsonObject = new JSONObject(texto);
+                System.out.println("Recibido: \n"+ jsonObject.toString(2));
+
+                //socketAux.close();
+                //flujoEntrada.close();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

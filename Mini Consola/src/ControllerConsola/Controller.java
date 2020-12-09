@@ -102,15 +102,28 @@ class PanelBotones extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object botonPresionado = e.getSource();
         try {
-            Socket socket = new Socket("192.168.1.124", 9999);
+            Socket socket = new Socket("192.168.1.124", 9997);
             DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
-            BufferedReader flujoEntrada = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("message", "Hello World");
+            if (botonPresionado==arriba){
+                jsonObject.put("arriba", 1);
+            }
+            else if (botonPresionado==abajo){
+                jsonObject.put("abajo", 1);
+            }
+            else if (botonPresionado==derecha){
+                jsonObject.put("derecha", 1);
+            }
+            else if (botonPresionado==izquierda){
+                jsonObject.put("izquierda", 1);
+            }
+            else
+                jsonObject.put("comando", 1);
 
-            flujoSalida.writeUTF(jsonObject.toString() + "\n");
-            flujoSalida.flush();
+            flujoSalida.writeUTF(jsonObject.toString());
+            flujoSalida.close();
+            socket.close();
 
         } catch (IOException ioException) {
             ioException.printStackTrace();
