@@ -9,22 +9,81 @@ import java.net.Socket;
 
 public class PacMan {
     private static Color[][] coloresPantalla = new Color[50][50];
-    int posXPacMan=50;
-    int posYPacMan=50;
+    int posXPacMan = 50;
+    int posYPacMan = 50;
 
     public static void main(String[] args) {
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
-                if (i == 1) {
-                    coloresPantalla[i][j] = Color.BLUE;
-                }
-                else
-                    coloresPantalla[i][j] = Color.BLACK;
-                SalidaPacMan salidaPacMan = new SalidaPacMan(i, j, coloresPantalla[i][j].toString());
-            }
-        }
+        PacMan pacMan = new PacMan();
         EntradaPacMan entradaPacMan = new EntradaPacMan();
 
+    }
+
+    public PacMan() {
+        iniciarMapa();
+    }
+
+    public void iniciarMapa() {
+        for (int i = 0; i < 50; i++) {
+            coloresPantalla[0][i] = Color.BLUE;
+        }
+        for (int i = 1; i < 50; i++) {
+            for (int j = 0; j < 50; j++) {
+                if (i == 1 && j == 0 || j == 24 || j == 25 || j == 26 || j == 49) {
+                    coloresPantalla[i][j] = Color.BLUE;
+                }
+                // hay un cambio en el j==13
+                else if (i == 2 || i == 3 || i == 4 || i == 5 || i == 6 && (j == 3 || j == 0 || j == 2 || j == 4 || j == 5 || j == 6 || j == 7 || j == 9 || j == 10 || j == 8 || j == 12 || j == 14 || j == 15 || j == 16 || j == 17 || j == 18 || j == 19 || j == 20 || j == 21 || j == 22 || j == 24 || j == 25 || j == 26 || j == 27 || j == 29 || j == 30 || j == 31 || j == 32 || j == 33 || j == 34 || j == 35 || j == 36 || j == 37 || j == 39 || j == 40 || j == 41 || j == 42 || j == 43 || j == 44 || j == 45 || j == 46 || j == 47 || j == 49)) {
+                    coloresPantalla[i][j] = Color.BLUE;
+                } else if (i == 8 || i == 9 || i == 10 && (j == 3 || j == 0 || j == 2 || j == 4 || j == 5 || j == 6 || j == 7 || j == 9 || j == 10 || j == 8 || j == 12 || j == 14 || j == 15 || j == 16 || j == 18 || j == 19 || j == 20 || j == 21 || j == 22 || j == 23 || j == 24 || j == 25 || j == 26  || j == 28 || j == 29 || j == 30 || j == 31 || j == 33 || j == 34 || j == 35 || j == 36 || j == 37 || j == 39 || j == 40 || j == 41 || j == 43 || j == 44 || j == 45 || j == 46 || j == 47 || j == 49)) {
+                    coloresPantalla[i][j] = Color.BLUE;
+                } else
+                    coloresPantalla[i][j] = Color.BLACK;
+            }
+        }
+        Runnable r = new EnviarMapa();
+        Thread nuevoHilo = new Thread(r);
+        nuevoHilo.start();
+    }
+
+    static class EnviarMapa implements Runnable {
+        public EnviarMapa() {
+        }
+
+        @Override
+        public void run() {
+            try {
+                Socket socket = new Socket("192.168.1.124", 9999);
+                DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
+                String llave;
+                JSONObject jsonObject = new JSONObject();
+                for (int i = 0; i < 25; i++) {
+                    for (int j = 0; j < 25; j++) {
+                        llave = i +","+ j;
+                        jsonObject.put(llave, coloresPantalla[i][j].toString());
+                    }
+                }
+
+                flujoSalida.writeUTF(jsonObject.toString());
+
+                Socket socket1 = new Socket("192.168.1.124", 9999);
+                DataOutputStream flujoSalida1 =  new DataOutputStream(socket1.getOutputStream());
+                String llave1;
+                JSONObject jsonObject1 = new JSONObject();
+                for (int i = 25; i < 50; i++) {
+                    for (int j = 25; j < 50; j++) {
+                        llave1 = i +","+ j;
+                        jsonObject1.put(llave1, coloresPantalla[i][j].toString());
+                    }
+                }
+
+                flujoSalida1.writeUTF(jsonObject1.toString());
+                //flujoSalida.close();
+                //socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     static class EntradaPacMan implements Runnable {

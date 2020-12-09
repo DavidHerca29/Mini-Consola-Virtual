@@ -57,7 +57,7 @@ class Pantalla extends JFrame implements Runnable{
                 System.out.println("Recibido: \n"+ jsonObject.toString(2));
 
                 //socketAux.close();
-                //flujoEntrada.close();
+                flujoEntrada.close();
             }
 
         } catch (IOException e) {
