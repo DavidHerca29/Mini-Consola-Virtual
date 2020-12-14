@@ -1,5 +1,6 @@
 package ControllerConsola;
 
+import Comunicacion.Cliente;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 public class Controller {
     public static void main(String[] args) {
         Controles controles = new Controles();
+
     }
 }
 class Controles extends JFrame {
@@ -101,33 +103,20 @@ class PanelBotones extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object botonPresionado = e.getSource();
-        try {
-            Socket socket = new Socket("192.168.1.124", 9997);
-            DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
-
-            JSONObject jsonObject = new JSONObject();
-            if (botonPresionado==arriba){
-                jsonObject.put("arriba", 1);
-            }
-            else if (botonPresionado==abajo){
-                jsonObject.put("abajo", 1);
-            }
-            else if (botonPresionado==derecha){
-                jsonObject.put("derecha", 1);
-            }
-            else if (botonPresionado==izquierda){
-                jsonObject.put("izquierda", 1);
-            }
-            else
-                jsonObject.put("comando", 1);
-
-            flujoSalida.writeUTF(jsonObject.toString());
-            flujoSalida.close();
-            socket.close();
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            System.out.println(ioException.getMessage());
+        if (botonPresionado==arriba){
+            Cliente cliente = new Cliente("192.168.1.124", 9997, "arriba", "1");
+        }
+        else if (botonPresionado==abajo){
+            Cliente cliente = new Cliente("192.168.1.124", 9997, "abajo", "1");
+        }
+        else if (botonPresionado==derecha){
+            Cliente cliente = new Cliente("192.168.1.124", 9997, "derecha", "1");
+        }
+        else if (botonPresionado==izquierda){
+            Cliente cliente = new Cliente("192.168.1.124", 9997, "izquierda", "1");
+        }
+        else {
+            Cliente cliente = new Cliente("192.168.1.124", 9997, "comando", "1");
         }
     }
 }

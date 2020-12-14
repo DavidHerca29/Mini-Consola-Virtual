@@ -54,6 +54,7 @@ class Pantalla extends JFrame implements Runnable{
 
                 String texto = flujoEntrada.readUTF();
                 JSONObject jsonObject = new JSONObject(texto);
+
                 System.out.println("Recibido: \n"+ jsonObject.toString(2));
 
                 //socketAux.close();

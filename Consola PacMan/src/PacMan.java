@@ -12,6 +12,7 @@ public class PacMan {
     int posXPacMan = 50;
     int posYPacMan = 50;
 
+
     public static void main(String[] args) {
         PacMan pacMan = new PacMan();
         EntradaPacMan entradaPacMan = new EntradaPacMan();
@@ -105,8 +106,8 @@ public class PacMan {
 
                     String texto = flujoEntrada.readUTF();
                     JSONObject jsonObject = new JSONObject(texto);
-                    System.out.println("Recibido: \n" + jsonObject.toString(2));
 
+                    System.out.println("Recibido: \n" + jsonObject.toString(2));
 
                     socketAux.close();
                     flujoEntrada.close();
