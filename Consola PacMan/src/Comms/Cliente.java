@@ -1,4 +1,4 @@
-package Comunicacion;
+package Comms;
 
 import org.json.JSONObject;
 

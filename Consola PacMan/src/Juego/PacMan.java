@@ -1,8 +1,10 @@
+package Juego;
+
+import Comms.Cliente;
 import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -52,38 +54,14 @@ public class PacMan {
 
         @Override
         public void run() {
-            try {
-                Socket socket = new Socket("192.168.1.124", 9999);
-                DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
-                String llave;
-                JSONObject jsonObject = new JSONObject();
-                for (int i = 0; i < 25; i++) {
-                    for (int j = 0; j < 25; j++) {
-                        llave = i +","+ j;
-                        jsonObject.put(llave, coloresPantalla[i][j].toString());
-                    }
+        Cliente cliente;
+            String llave;
+            for (int i = 0; i < 50; i++) {
+                for (int j = 0; j < 50; j++) {
+                    llave = i +","+ j;
+                    cliente = new Cliente("192.168.1.124", 9999, llave, coloresPantalla[i][j].toString());
                 }
-
-                flujoSalida.writeUTF(jsonObject.toString());
-
-                Socket socket1 = new Socket("192.168.1.124", 9999);
-                DataOutputStream flujoSalida1 =  new DataOutputStream(socket1.getOutputStream());
-                String llave1;
-                JSONObject jsonObject1 = new JSONObject();
-                for (int i = 25; i < 50; i++) {
-                    for (int j = 25; j < 50; j++) {
-                        llave1 = i +","+ j;
-                        jsonObject1.put(llave1, coloresPantalla[i][j].toString());
-                    }
-                }
-
-                flujoSalida1.writeUTF(jsonObject1.toString());
-                //flujoSalida.close();
-                //socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-
         }
     }
 
@@ -117,7 +95,7 @@ public class PacMan {
                 e.printStackTrace();
             }
         }
-    }
+    }/*
     static class SalidaPacMan implements Runnable{
         int columna;
         int fila;
@@ -148,5 +126,5 @@ public class PacMan {
             }
 
         }
-    }
+    }*/
 }
