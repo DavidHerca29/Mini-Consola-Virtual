@@ -54,12 +54,10 @@ public class PacMan {
 
         @Override
         public void run() {
-        Cliente cliente;
-            String llave;
+            Cliente cliente = new Cliente("192.168.1.124", 9999);
             for (int i = 0; i < 50; i++) {
                 for (int j = 0; j < 50; j++) {
-                    llave = i +","+ j;
-                    cliente = new Cliente("192.168.1.124", 9999, llave, coloresPantalla[i][j].toString());
+                    cliente.enviarMensaje(i,j, coloresPantalla[i][j].getRed(), coloresPantalla[i][j].getGreen(), coloresPantalla[i][j].getBlue());
                 }
             }
         }

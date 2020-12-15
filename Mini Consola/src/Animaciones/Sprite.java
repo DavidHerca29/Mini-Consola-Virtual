@@ -1,2 +1,5 @@
-package Animaciones;public class Sprite {
+package Animaciones;
+
+public class Sprite {
+
 }

@@ -1,6 +1,6 @@
 package ViewConsola;
 
-import com.sun.source.util.ParameterNameProvider;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
 public class View {
     public static void main(String[] args){
@@ -17,7 +17,6 @@ public class View {
 }
 class Pantalla extends JFrame implements Runnable{
     private JLabel[][] pixels = new JLabel[50][50];
-    //private ModeloPantalla viewPixels;
     public Pantalla(){
         getContentPane().setBackground(Color.BLACK);
         setSize(1200, 650);
@@ -29,7 +28,6 @@ class Pantalla extends JFrame implements Runnable{
                 pixels[i][j].setOpaque(true);
                 pixels[i][j].setBackground(Color.WHITE);
                 pixels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                //pixels[i][j].setPreferredSize(new Dimension(10, 10));
                 add(pixels[i][j]);
             }
         }
@@ -53,9 +51,10 @@ class Pantalla extends JFrame implements Runnable{
                 DataInputStream flujoEntrada = new DataInputStream(socketAux.getInputStream());
 
                 String texto = flujoEntrada.readUTF();
-                JSONObject jsonObject = new JSONObject(texto);
+                JSONArray jsonObject = new JSONArray(texto);
 
-                System.out.println("Recibido: \n"+ jsonObject.toString(2));
+                //System.out.println("Recibido: \n"+ jsonObject.toString(2));
+                procesarMensaje(jsonObject);
 
                 //socketAux.close();
                 flujoEntrada.close();
@@ -65,7 +64,17 @@ class Pantalla extends JFrame implements Runnable{
             e.printStackTrace();
         }
     }
+    private void procesarMensaje(JSONArray jsonObject){
+        // decodifica el mensaje en el JSON para poder cambiar el color
+        Color color = new Color(jsonObject.getInt(2), jsonObject.getInt(3), jsonObject.getInt(4));
+        //System.out.println(jsonObject); // verificar que en verdad se mandan arreglos mediante el json
+        cambiarColor(jsonObject.getInt(0), jsonObject.getInt(1), color);
+    }
+    private void cambiarColor(int col, int fil, Color color){
+        pixels[col][fil].setBackground(color);
+    }
 }
+/*
 class ModeloPantalla extends JPanel{
     private JLabel[][] pixels = new JLabel[50][50];
 
@@ -86,4 +95,4 @@ class ModeloPantalla extends JPanel{
         }
     }
 }
-
+*/

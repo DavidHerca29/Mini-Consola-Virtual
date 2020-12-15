@@ -1,5 +1,6 @@
 package Comms;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
@@ -9,17 +10,12 @@ import java.net.Socket;
 public class Cliente {
     private String ip;
     private int port;
-    private String llave;
-    private String color;
 
-    public Cliente(String ip, int port, String llave, String color) {
+    public Cliente(String ip, int port){
         this.ip = ip;
         this.port = port;
-        this.llave = llave;
-        this.color = color;
-        enviarMensaje();
     }
-    public void enviarMensaje(){
+    public void enviarMensaje(String llave, String color){
         try {
             Socket socket = new Socket(ip, port);
             DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
@@ -35,4 +31,25 @@ public class Cliente {
             System.out.println(ioException.getMessage());
         }
     }
+    public void enviarMensaje(int columna, int fila, int red, int green, int blue){
+        try {
+            Socket socket = new Socket(ip, port);
+            DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
+
+            JSONArray jsonObject = new JSONArray();
+            jsonObject.put(0, columna);
+            jsonObject.put(1, fila);
+            jsonObject.put(2, red);
+            jsonObject.put(3, green);
+            jsonObject.put(4, blue);
+            flujoSalida.writeUTF(jsonObject.toString());
+            //flujoSalida.close();
+            //socket.close();
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            System.out.println(ioException.getMessage());
+        }
+    }
+
 }

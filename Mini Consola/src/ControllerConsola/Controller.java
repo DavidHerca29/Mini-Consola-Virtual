@@ -1,5 +1,7 @@
 package ControllerConsola;
 
+
+
 import Comms.Cliente;
 
 import javax.swing.*;
@@ -96,20 +98,21 @@ class PanelBotones extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object botonPresionado = e.getSource();
+        Cliente cliente = new Cliente("192.168.1.124", 9997);
         if (botonPresionado==arriba){
-            Cliente cliente = new Cliente("192.168.1.124", 9997, "arriba", "1");
+            cliente.enviarMensaje("arriba", "1");
         }
         else if (botonPresionado==abajo){
-            Cliente cliente = new Cliente("192.168.1.124", 9997, "abajo", "1");
+            cliente.enviarMensaje("abajo", "1");
         }
         else if (botonPresionado==derecha){
-            Cliente cliente = new Cliente("192.168.1.124", 9997, "derecha", "1");
+            cliente.enviarMensaje("derecha", "1");
         }
         else if (botonPresionado==izquierda){
-            Cliente cliente = new Cliente("192.168.1.124", 9997, "izquierda", "1");
+            cliente.enviarMensaje("izquierda", "1");
         }
         else {
-            Cliente cliente = new Cliente("192.168.1.124", 9997, "comando", "1");
+            cliente.enviarMensaje("comando", "1");
         }
     }
 }
