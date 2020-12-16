@@ -10,39 +10,92 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PacMan {
-    private static Color[][] coloresPantalla = new Color[50][50];
-    int posXPacMan = 50;
-    int posYPacMan = 50;
+    private static final Color[][] coloresPantalla = new Color[50][50];
+    private int posXPacMan = 50;
+    private int posYPacMan = 50;
+    protected short direccion = 1;
 
 
     public static void main(String[] args) {
         PacMan pacMan = new PacMan();
-        EntradaPacMan entradaPacMan = new EntradaPacMan();
 
     }
 
     public PacMan() {
         iniciarMapa();
+        EntradaPacMan entradaPacMan = new EntradaPacMan();
+        iniciarJuego();
+    }
+    public void ponerPixel(int col, int fil, Color color){
+        coloresPantalla[col][fil] = color;
     }
 
-    public void iniciarMapa() {
-        for (int i = 0; i < 50; i++) {
-            coloresPantalla[0][i] = Color.BLUE;
+    public void mapLineaH(int columna, int columna1, int fila, Color color){
+        if (columna==columna1){
+            ponerPixel(columna, fila, color);
         }
-        for (int i = 1; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
-                if (i == 1 && j == 0 || j == 24 || j == 25 || j == 26 || j == 49) {
-                    coloresPantalla[i][j] = Color.BLUE;
-                }
-                // hay un cambio en el j==13
-                else if (i == 2 || i == 3 || i == 4 || i == 5 || i == 6 && (j == 3 || j == 0 || j == 2 || j == 4 || j == 5 || j == 6 || j == 7 || j == 9 || j == 10 || j == 8 || j == 12 || j == 14 || j == 15 || j == 16 || j == 17 || j == 18 || j == 19 || j == 20 || j == 21 || j == 22 || j == 24 || j == 25 || j == 26 || j == 27 || j == 29 || j == 30 || j == 31 || j == 32 || j == 33 || j == 34 || j == 35 || j == 36 || j == 37 || j == 39 || j == 40 || j == 41 || j == 42 || j == 43 || j == 44 || j == 45 || j == 46 || j == 47 || j == 49)) {
-                    coloresPantalla[i][j] = Color.BLUE;
-                } else if (i == 8 || i == 9 || i == 10 && (j == 3 || j == 0 || j == 2 || j == 4 || j == 5 || j == 6 || j == 7 || j == 9 || j == 10 || j == 8 || j == 12 || j == 14 || j == 15 || j == 16 || j == 18 || j == 19 || j == 20 || j == 21 || j == 22 || j == 23 || j == 24 || j == 25 || j == 26  || j == 28 || j == 29 || j == 30 || j == 31 || j == 33 || j == 34 || j == 35 || j == 36 || j == 37 || j == 39 || j == 40 || j == 41 || j == 43 || j == 44 || j == 45 || j == 46 || j == 47 || j == 49)) {
-                    coloresPantalla[i][j] = Color.BLUE;
-                } else
-                    coloresPantalla[i][j] = Color.BLACK;
+        else if (columna<columna1){
+            while (columna!=columna1){
+                ponerPixel(columna, fila, color);
+                columna++;
             }
         }
+        else {
+            while (columna!=columna1){
+                ponerPixel(columna1, fila, color);
+                columna1++;
+            }
+        }
+    }
+    public void mapLineaV(int columna, int fila, int fila1, Color color){
+        if (fila==fila1){
+            ponerPixel(columna, fila, color);
+        }
+        else if (fila<fila1){
+            while (fila!=fila1){
+                ponerPixel(columna, fila, color);
+                fila++;
+            }
+        }
+        else {
+            while (fila!=fila1){
+                ponerPixel(columna, fila1, color);
+                fila1++;
+            }
+        }
+    }
+    public void mapRectangulo(int col1, int fil1, int col2, int fil2, Color color){
+        if (col1==col2){ // en caso de que se envie de manera que es linea vertical
+            mapLineaV(col1, fil1,fil2, color);
+        }
+        else if (fil1==fil2){
+            mapLineaH(col1, col2, fil1, color);
+        }
+        else if (col1<col2){
+            while (col1!=col2) {
+                mapLineaV(col1, fil1, fil2, color);
+                col1++;
+            }
+        }
+        else {
+            while (col1!=col2) {
+                mapLineaV(col1, fil1, fil2, color);
+                col1--;
+            }
+        }
+    }
+    public void iniciarMapa() {
+        for (int i=1;i<49;i++){
+            for (int j=1;j<49;j++){
+                coloresPantalla[i][j] = Color.CYAN;
+            }
+        }
+        // colocamos al pacman
+        coloresPantalla[50][50] = Color.YELLOW;
+        mapLineaH(0, 49, 0, Color.blue);
+        mapLineaH(0, 50, 49, Color.blue);
+        mapLineaV(0, 0, 49, Color.blue);
+        mapLineaV(49, 0, 49, Color.blue);
         Runnable r = new EnviarMapa();
         Thread nuevoHilo = new Thread(r);
         nuevoHilo.start();
@@ -63,7 +116,7 @@ public class PacMan {
         }
     }
 
-    static class EntradaPacMan implements Runnable {
+    class EntradaPacMan implements Runnable {
 
         public EntradaPacMan() {
 
@@ -83,7 +136,8 @@ public class PacMan {
                     String texto = flujoEntrada.readUTF();
                     JSONObject jsonObject = new JSONObject(texto);
 
-                    System.out.println("Recibido: \n" + jsonObject.toString(2));
+                    //System.out.println("Recibido: \n" + jsonObject.toString(2));
+                    procesarMensaje(jsonObject);
 
                     socketAux.close();
                     flujoEntrada.close();
@@ -93,7 +147,20 @@ public class PacMan {
                 e.printStackTrace();
             }
         }
-    }/*
+        public void procesarMensaje(JSONObject jsonObject){
+            if (jsonObject.has("arriba")){
+                direccion = 1;
+            }else if (jsonObject.has("abajo")){
+                direccion = 2;
+            }
+            else if (jsonObject.has("derecha")){
+                direccion = 4;
+            }
+            else
+                direccion = 3;
+        }
+    }
+    /*
     static class SalidaPacMan implements Runnable{
         int columna;
         int fila;
