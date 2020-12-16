@@ -10,11 +10,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PacMan {
-    private static final Color[][] coloresPantalla = new Color[50][50];
-    private int posXPacMan = 50;
-    private int posYPacMan = 50;
+    private static Color[][] coloresPantalla = new Color[50][50];
+    private int posXPacMan = 25;
+    private int posYPacMan = 25;
     protected short direccion = 1;
-
+    private boolean mapaConstruir = false;
+    private Cliente cliente = new Cliente("192.168.1.124", 9999);
 
     public static void main(String[] args) {
         PacMan pacMan = new PacMan();
@@ -22,7 +23,7 @@ public class PacMan {
     }
 
     public PacMan() {
-        iniciarMapa();
+
         EntradaPacMan entradaPacMan = new EntradaPacMan();
         iniciarJuego();
     }
@@ -91,29 +92,65 @@ public class PacMan {
             }
         }
         // colocamos al pacman
-        coloresPantalla[50][50] = Color.YELLOW;
+        coloresPantalla[posXPacMan][posYPacMan] = Color.YELLOW;
         mapLineaH(0, 49, 0, Color.blue);
         mapLineaH(0, 50, 49, Color.blue);
         mapLineaV(0, 0, 49, Color.blue);
         mapLineaV(49, 0, 49, Color.blue);
-        Runnable r = new EnviarMapa();
-        Thread nuevoHilo = new Thread(r);
-        nuevoHilo.start();
+        EnviarMapa();
+
     }
+    public void iniciarJuego(){
+        iniciarMapa();
 
-    static class EnviarMapa implements Runnable {
-        public EnviarMapa() {
-        }
-
-        @Override
-        public void run() {
-            Cliente cliente = new Cliente("192.168.1.124", 9999);
-            for (int i = 0; i < 50; i++) {
-                for (int j = 0; j < 50; j++) {
-                    cliente.enviarMensaje(i,j, coloresPantalla[i][j].getRed(), coloresPantalla[i][j].getGreen(), coloresPantalla[i][j].getBlue());
-                }
+        while (true){
+            if (mapaConstruir) {
+                movePacMan();
+                enviarPacMan();
             }
         }
+    }
+    public void movePacMan(){
+        coloresPantalla[posXPacMan][posYPacMan] = Color.black;
+        enviarPacMan();
+        if (direccion==1){
+            posYPacMan-=1;
+        }
+        else if (direccion==2){
+            posYPacMan+=1;
+        }
+        else if (direccion==3){
+            posXPacMan-=1;
+        }
+        else posXPacMan+=1;
+        if (posXPacMan>48){
+            posXPacMan=48;
+        }
+        else if (posXPacMan<1){
+            posXPacMan=1;
+        }
+        if (posYPacMan>48){
+            posYPacMan=49;
+        }
+        else if (posYPacMan<1){
+            posYPacMan=1;
+        }
+        actualizarPacMan();
+    }
+    public void actualizarPacMan(){
+        coloresPantalla[posXPacMan][posYPacMan] = Color.YELLOW;
+    }
+    public void enviarPacMan(){
+        cliente.enviarMensaje(posXPacMan,posYPacMan, coloresPantalla[posXPacMan][posYPacMan].getRed(), coloresPantalla[posXPacMan][posYPacMan].getGreen(), coloresPantalla[posXPacMan][posYPacMan].getBlue());
+    }
+
+    public void EnviarMapa() {
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < 50; j++) {
+                cliente.enviarMensaje(i,j, coloresPantalla[i][j].getRed(), coloresPantalla[i][j].getGreen(), coloresPantalla[i][j].getBlue());
+            }
+        }
+        mapaConstruir = true;
     }
 
     class EntradaPacMan implements Runnable {
@@ -139,8 +176,8 @@ public class PacMan {
                     //System.out.println("Recibido: \n" + jsonObject.toString(2));
                     procesarMensaje(jsonObject);
 
-                    socketAux.close();
-                    flujoEntrada.close();
+                    //socketAux.close();
+                    //flujoEntrada.close();
                 }
 
             } catch (IOException e) {
