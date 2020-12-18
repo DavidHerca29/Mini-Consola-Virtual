@@ -8,6 +8,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PacMan {
     private static Color[][] coloresPantalla = new Color[50][50];
@@ -102,27 +104,31 @@ public class PacMan {
     }
     public void iniciarJuego(){
         iniciarMapa();
-
-        while (true){
-            if (mapaConstruir) {
-                movePacMan();
-                enviarPacMan();
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (mapaConstruir) {
+                    movePacMan();
+                    enviarPacMan();
+                }
             }
-        }
+        };
+        timer.schedule(task, 1000 ,1000);
     }
     public void movePacMan(){
         coloresPantalla[posXPacMan][posYPacMan] = Color.black;
         enviarPacMan();
         if (direccion==1){
-            posYPacMan-=1;
-        }
-        else if (direccion==2){
-            posYPacMan+=1;
-        }
-        else if (direccion==3){
             posXPacMan-=1;
         }
-        else posXPacMan+=1;
+        else if (direccion==2){
+            posXPacMan+=1;
+        }
+        else if (direccion==3){
+            posYPacMan-=1;
+        }
+        else posYPacMan+=1;
         if (posXPacMan>48){
             posXPacMan=48;
         }
