@@ -18,6 +18,7 @@ public class PacMan {
     protected short direccion = 1;
     private boolean mapaConstruir = false;
     private Cliente cliente = new Cliente("192.168.1.124", 9999);
+    private boolean jugando = true;
 
     public static void main(String[] args) {
         PacMan pacMan = new PacMan();
@@ -109,12 +110,19 @@ public class PacMan {
             @Override
             public void run() {
                 if (mapaConstruir) {
-                    movePacMan();
-                    enviarPacMan();
+                    if (jugando) {
+                        movePacMan();
+                        enviarPacMan();
+                    }
+                    else
+                        terminarJuego();
                 }
             }
         };
-        timer.schedule(task, 1000 ,1000);
+        timer.schedule(task, 200 ,60); // timer para moderar el envio de informacion
+    }
+    public void terminarJuego(){
+        System.exit(1);
     }
     public void movePacMan(){
         coloresPantalla[posXPacMan][posYPacMan] = Color.black;
@@ -199,8 +207,10 @@ public class PacMan {
             else if (jsonObject.has("derecha")){
                 direccion = 4;
             }
-            else
+            else if (jsonObject.has("izquierda"))
                 direccion = 3;
+            else
+                jugando=false;
         }
     }
     /*
