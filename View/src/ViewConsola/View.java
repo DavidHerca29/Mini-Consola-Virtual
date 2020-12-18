@@ -1,5 +1,6 @@
 package ViewConsola;
 
+import Comms.MostrarMensaje;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -65,7 +66,9 @@ class Pantalla extends JFrame implements Runnable{
     private void procesarMensaje(JSONArray jsonObject){
         // decodifica el mensaje en el JSON para poder cambiar el color o bien, mostrar el mensaje ganador
         if (jsonObject.length()==1){
-            JOptionPane.showMessageDialog(null, "Has ganado con un total de: "+jsonObject.getInt(0)+"puntos.");
+            Runnable mostrarMensaje = new MostrarMensaje(jsonObject.getInt(0));
+            Thread thread = new Thread(mostrarMensaje);
+            thread.start();
         }
         else {
             Color color = new Color(jsonObject.getInt(2), jsonObject.getInt(3), jsonObject.getInt(4));

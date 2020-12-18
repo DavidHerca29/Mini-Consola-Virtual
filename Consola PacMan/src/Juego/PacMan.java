@@ -92,7 +92,7 @@ public class PacMan {
     public void iniciarMapa() {
         for (int i=1;i<49;i++){
             for (int j=1;j<49;j++){
-                coloresPantalla[i][j] = Color.cyan;//Color.white;
+                coloresPantalla[i][j] = Color.white;// cambiar de color menos azul para demostrar que se gana
             }
         }
         // colocamos al pacman
@@ -105,7 +105,7 @@ public class PacMan {
         mapRectangulo(7, 10, 10, 40, Color.blue);
         mapRectangulo(38, 10, 41, 40, Color.blue);
         coloresPantalla[posXPacMan][posYPacMan] = Color.YELLOW;
-        coloresPantalla[posXPacMan][posYPacMan-15] = Color.white;
+        //coloresPantalla[posXPacMan][posYPacMan-15] = Color.white; // sirve para verficar rapido que si funciona para determinar si se gana
         mapLineaH(0, 49, 0, Color.blue);
         mapLineaH(0, 50, 49, Color.blue);
         mapLineaV(0, 0, 49, Color.blue);
