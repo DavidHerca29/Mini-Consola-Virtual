@@ -34,8 +34,6 @@ class Pantalla extends JFrame implements Runnable{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        //viewPixels = new ModeloPantalla();
-        //add(viewPixels);
         Thread hilo1 = new Thread(this);
         hilo1.start();
 
@@ -65,34 +63,17 @@ class Pantalla extends JFrame implements Runnable{
         }
     }
     private void procesarMensaje(JSONArray jsonObject){
-        // decodifica el mensaje en el JSON para poder cambiar el color
-        Color color = new Color(jsonObject.getInt(2), jsonObject.getInt(3), jsonObject.getInt(4));
-        //System.out.println(jsonObject); // verificar que en verdad se mandan arreglos mediante el json
-        cambiarColor(jsonObject.getInt(0), jsonObject.getInt(1), color);
+        // decodifica el mensaje en el JSON para poder cambiar el color o bien, mostrar el mensaje ganador
+        if (jsonObject.length()==1){
+            JOptionPane.showMessageDialog(null, "Has ganado con un total de: "+jsonObject.getInt(0)+"puntos.");
+        }
+        else {
+            Color color = new Color(jsonObject.getInt(2), jsonObject.getInt(3), jsonObject.getInt(4));
+            //System.out.println(jsonObject); // verificar que en verdad se mandan arreglos mediante el json
+            cambiarColor(jsonObject.getInt(0), jsonObject.getInt(1), color);
+        }
     }
     private void cambiarColor(int col, int fil, Color color){
-        pixels[col][fil].setBackground(color);
+        pixels[fil][col].setBackground(color);
     }
 }
-/*
-class ModeloPantalla extends JPanel{
-    private JLabel[][] pixels = new JLabel[50][50];
-
-    public ModeloPantalla() {
-        setVisible(true);
-        setBounds(820, 640, 0,0);
-        setLayout(new GridLayout(50, 50));
-        for (int i = 0; i<50;i++){
-            for (int j=0;j<50;j++){
-                pixels[i][j] = new JLabel();
-                pixels[i][j].setBackground(Color.RED);
-            }
-        }
-        for (int i=0; i<50; i++){
-            for (int j=0; j<50;j++) {
-                this.add(pixels[i][j]);
-            }
-        }
-    }
-}
-*/

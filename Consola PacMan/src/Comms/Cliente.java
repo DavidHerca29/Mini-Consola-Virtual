@@ -31,6 +31,22 @@ public class Cliente {
             System.out.println(ioException.getMessage());
         }
     }
+    public void enviarMensaje(int puntaje){
+        try {
+            Socket socket = new Socket(ip, port);
+            DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
+
+            JSONArray jsonObject = new JSONArray();
+            jsonObject.put(0, puntaje);
+            flujoSalida.writeUTF(jsonObject.toString());
+            flujoSalida.close();
+            socket.close();
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            System.out.println(ioException.getMessage());
+        }
+    }
     public void enviarMensaje(int columna, int fila, int red, int green, int blue){
         try {
             Socket socket = new Socket(ip, port);

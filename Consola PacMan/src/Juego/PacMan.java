@@ -19,6 +19,7 @@ public class PacMan {
     private boolean mapaConstruir = false;
     private Cliente cliente = new Cliente("192.168.1.124", 9999);
     private boolean jugando = true;
+    private int puntaje = 0;
 
     public static void main(String[] args) {
         PacMan pacMan = new PacMan();
@@ -91,11 +92,20 @@ public class PacMan {
     public void iniciarMapa() {
         for (int i=1;i<49;i++){
             for (int j=1;j<49;j++){
-                coloresPantalla[i][j] = Color.CYAN;
+                coloresPantalla[i][j] = Color.cyan;//Color.white;
             }
         }
         // colocamos al pacman
+        mapRectangulo(1, 10, 5, 40, Color.blue);
+        mapRectangulo(10, 1, 45, 6, Color.blue);
+        mapRectangulo(14, 20, 21, 35, Color.blue);
+        mapRectangulo(28, 20, 35, 35, Color.blue);
+        mapRectangulo(45, 17, 49, 34, Color.blue);
+        mapRectangulo(10, 43, 45, 49, Color.blue);
+        mapRectangulo(7, 10, 10, 40, Color.blue);
+        mapRectangulo(38, 10, 41, 40, Color.blue);
         coloresPantalla[posXPacMan][posYPacMan] = Color.YELLOW;
+        coloresPantalla[posXPacMan][posYPacMan-15] = Color.white;
         mapLineaH(0, 49, 0, Color.blue);
         mapLineaH(0, 50, 49, Color.blue);
         mapLineaV(0, 0, 49, Color.blue);
@@ -113,43 +123,73 @@ public class PacMan {
                     if (jugando) {
                         movePacMan();
                         enviarPacMan();
+                        if (verificarGane()){
+                            victoria();
+                        }
                     }
                     else
                         terminarJuego();
                 }
             }
         };
-        timer.schedule(task, 200 ,60); // timer para moderar el envio de informacion
+        timer.schedule(task, 200 ,100); // timer para moderar el envio de informacion
+    }
+    private void victoria(){
+        cliente.enviarMensaje(puntaje);
+        jugando=false;
+    }
+    private boolean verificarGane(){
+        for (int i = 0; i<50;i++){
+            for (int j = 0;j<50; j++){
+                if (coloresPantalla[i][j]==Color.white)
+                    return false;
+            }
+        }
+        return true;
     }
     public void terminarJuego(){
+        for (int i = 0;i<50;i++){
+            for (int j = 0; j<50;j++){
+                coloresPantalla[i][j] = Color.gray;
+            }
+        }
+        EnviarMapa();
         System.exit(1);
     }
     public void movePacMan(){
         coloresPantalla[posXPacMan][posYPacMan] = Color.black;
         enviarPacMan();
         if (direccion==1){
-            posXPacMan-=1;
+            if (validarMovPacMan(posXPacMan, posYPacMan-1)) {
+                posYPacMan -= 1;
+                puntaje++;
+            }
         }
         else if (direccion==2){
-            posXPacMan+=1;
+            if (validarMovPacMan(posXPacMan, posYPacMan+1)) {
+                posYPacMan += 1;
+                puntaje++;
+            }
         }
         else if (direccion==3){
-            posYPacMan-=1;
+            if (validarMovPacMan(posXPacMan-1, posYPacMan)) {
+                posXPacMan -= 1;
+                puntaje++;
+            }
         }
-        else posYPacMan+=1;
-        if (posXPacMan>48){
-            posXPacMan=48;
-        }
-        else if (posXPacMan<1){
-            posXPacMan=1;
-        }
-        if (posYPacMan>48){
-            posYPacMan=49;
-        }
-        else if (posYPacMan<1){
-            posYPacMan=1;
+        else{
+            if (validarMovPacMan(posXPacMan+1, posYPacMan)) {
+                posXPacMan += 1;
+                puntaje++;
+            }
         }
         actualizarPacMan();
+    }
+    private boolean validarMovPacMan(int XPac,int YPac){
+        if (coloresPantalla[XPac][YPac]==Color.blue){
+            return false;
+        }
+        return true;
     }
     public void actualizarPacMan(){
         coloresPantalla[posXPacMan][posYPacMan] = Color.YELLOW;
