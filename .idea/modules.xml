@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Consola PacMan/Consola PacMan.iml" filepath="$PROJECT_DIR$/Consola PacMan/Consola PacMan.iml" />
       <module fileurl="file://$PROJECT_DIR$/Mini Consola/Mini Consola.iml" filepath="$PROJECT_DIR$/Mini Consola/Mini Consola.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Mini-Consola-Virtual.iml" filepath="$PROJECT_DIR$/.idea/Mini-Consola-Virtual.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpaceInvaders/SpaceInvaders.iml" filepath="$PROJECT_DIR$/SpaceInvaders/SpaceInvaders.iml" />
       <module fileurl="file://$PROJECT_DIR$/View/View.iml" filepath="$PROJECT_DIR$/View/View.iml" />
     </modules>
   </component>
