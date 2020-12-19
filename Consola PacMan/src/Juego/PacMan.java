@@ -253,8 +253,4 @@ public class PacMan {
                 jugando=false;
         }
     }
-<<<<<<< Updated upstream
-    
-=======
->>>>>>> Stashed changes
 }
