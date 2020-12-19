@@ -253,36 +253,5 @@ public class PacMan {
                 jugando=false;
         }
     }
-    /*
-    static class SalidaPacMan implements Runnable{
-        int columna;
-        int fila;
-        String color;
-        public SalidaPacMan(int columnaP, int filaP, String colorP) {
-            columna = columnaP;
-            fila = filaP;
-            color = colorP;
-            Thread hilo1 = new Thread(this);
-            hilo1.start();
-        }
-
-        @Override
-        public void run() {
-            try {
-                Socket socket = new Socket("192.168.1.124", 9999);
-                DataOutputStream flujoSalida =  new DataOutputStream(socket.getOutputStream());
-
-                JSONObject jsonObject = new JSONObject();
-                String llave = String.valueOf(columna)+","+String.valueOf(fila);
-                jsonObject.put(llave, color);
-
-                flujoSalida.writeUTF(jsonObject.toString());
-                flujoSalida.close();
-                //socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }*/
+    
 }
